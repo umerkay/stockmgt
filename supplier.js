@@ -12,7 +12,21 @@ module.exports = (pool) => {
         res.status(500).send('An error occurred');
         } else {
         // The query was successful, send the result back to the client
-        res.send(results);
+        res.send({suppliers: results});
+        }
+    });
+    });
+
+    router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    // Retrieve the supplier data from the database
+    pool.query('SELECT * FROM supplier WHERE idsupplier = ?', [id],(error, results) => {
+        if (error) {
+        // There was an error executing the SQL query
+        res.status(500).send('An error occurred');
+        } else {
+        // The query was successful, send the result back to the client
+        res.send({supplier: results[0]});
         }
     });
     });

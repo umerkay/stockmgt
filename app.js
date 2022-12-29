@@ -15,8 +15,8 @@ const pool = mysql.createPool({
   database: 'stockmgt'
 });
 
-app.use('/customer', customer(pool));
-app.use('/supplier', supplier(pool));
+app.use('/api/v1/customer', customer(pool));
+app.use('/api/v1/supplier', supplier(pool));
 
 app.listen(2022, () => {
   console.log('API server listening on port 2022');
