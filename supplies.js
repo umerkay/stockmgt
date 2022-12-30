@@ -11,7 +11,7 @@ module.exports = (pool) => {
             res.status(500).send('An error occurred');
         } else {
             // The query was successful, send the result back to the client
-            res.send({supplies : results});
+            res.send({purchases : results.map(res => ({...res, ...{"combId": res.idstock + "/" + res.idsupplier}}))});
         }
         });
     });
@@ -24,25 +24,26 @@ module.exports = (pool) => {
             // res.status(500).send('An error occurred');
         } else {
             // The query was successful, send the result back to the client
-            res.send({supplies : results});
+            res.send({purchase: results[0]});
         }
         });
     });
     
     router.post('/add', (req, res) => {
         const { quantity,deliveryDate,payment,idstock,idsupplier } = req.body;
+        console.log(req.body)
         const sql = `INSERT INTO supplies (quantity, deliveryDate, payment, idstock, idsupplier) VALUES (?, ?, ?, ?, ?)`;
         const values = [quantity, deliveryDate, payment, idstock, idsupplier];
         pool.query(sql, values, (error, results) => {
             if (error) {
             res.status(500).json({ error });
             } else {
-            res.json({ supplies:results });
+            res.json({ purchases:results });
             }
         });
         });
     
-    router.delete('/:stocid/:suppid', (req, res) => {
+    router.get('/delete/:stocid/:suppid', (req, res) => {
         const { stocid,suppid } = req.params;
         const sql = `DELETE FROM supplies WHERE idstock = ? AND idsupplier=?`;
         const values = [stocid, suppid];
@@ -50,7 +51,7 @@ module.exports = (pool) => {
             if (error) {
             res.status(500).json({ error });
             } else {
-            res.json({ supplies:results });
+            res.json({ purchases:results });
             }
         });
     });

@@ -11,8 +11,32 @@ module.exports = (pool) => {
             res.status(500).send('An error occurred');
         } else {
             // The query was successful, send the result back to the client
-            res.send({stock: results});
+            res.send({products: results});
         }
+        });
+    });
+
+    router.patch('/', (req, res) => {
+        const { name, priceperunit, quantity, idstock } = req.body;
+        const updateQuery = `
+        UPDATE stock
+        SET name = ?, priceperunit = ?, quantity = ?
+        WHERE idstock = ?
+        `;
+
+        const values = [name, priceperunit, quantity, idstock];
+
+        pool.query(updateQuery, values, (error, results) => {
+        if (error) {
+            console.log(error)
+            return res.status(500).json({
+            error: 'Error updating supplier in database'
+            });
+        }
+        // respond with updated supplier data
+        res.json({
+            name, priceperunit, quantity
+        });
         });
     });
 
@@ -24,7 +48,7 @@ module.exports = (pool) => {
             res.status(500).send('An error occurred');
           } else {
             // The query was successful, send the result back to the client
-            res.send({ stock: results });
+            res.send({ product: results[0] });
           }
         });
       });
@@ -38,7 +62,7 @@ module.exports = (pool) => {
             if (error) {
             res.status(500).json({ error });
             } else {
-            res.json({ stock:results });
+            res.json({ products:results });
             }
         });
         });
@@ -51,7 +75,7 @@ module.exports = (pool) => {
             if (error) {
             res.status(500).json({ error });
             } else {
-            res.json({ stock:results });
+            res.json({ products:results });
             }
         });
     });

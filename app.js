@@ -23,11 +23,11 @@ const pool = mysql.createPool({
 
 app.use('/api/v1/customer', customer(pool));
 app.use('/api/v1/supplier', supplier(pool));
-app.use('/stock', stock(pool));
-app.use('/supplies',supplies(pool));
-app.use('/payment',payment(pool));
-app.use('/purchases', purchases(pool));
-app.use('/profit',profit(pool));
+app.use('/api/v1/stock', stock(pool));
+app.use('/api/v1/supplies',supplies(pool));
+app.use('/api/v1/payment',payment(pool));
+app.use('/api/v1/purchases', purchases(pool));
+app.use('/api/v1/profit',profit(pool));
 
 
 app.listen(2022, () => {

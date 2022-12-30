@@ -31,6 +31,33 @@ module.exports = (pool) => {
     });
     });
 
+    router.patch('/', (req, res) => {
+        const { name, address, idsupplier } = req.body;
+        const updateQuery = `
+        UPDATE supplier
+        SET name = ?, address = ?
+        WHERE idsupplier = ?
+        `;
+
+        const values = [name, address, idsupplier];
+
+        pool.query(updateQuery, values, (error, results) => {
+        if (error) {
+            console.log(error)
+            return res.status(500).json({
+            error: 'Error updating supplier in database'
+            });
+        }
+        // respond with updated supplier data
+        res.json({
+            idsupplier,
+            name,
+            address,
+            
+        });
+        });
+    });
+
     router.post('/add', (req, res) => {
     const { name, address } = req.body;
     const sql = `INSERT INTO supplier (name, address) VALUES (?, ?)`;
